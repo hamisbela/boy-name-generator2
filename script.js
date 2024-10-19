@@ -8,10 +8,18 @@ async function loadNames() {
         const response = await fetch('boy_names.csv');
         const data = await response.text();
         const rows = data.split('\n').slice(1); // Skip header
-        boyNames = rows.map(row => {
-            const [name, first_letter] = row.split(',');
-            return { name: name.trim(), first_letter: first_letter.trim() };
-        });
+        boyNames = rows
+            .map(row => {
+                const [name, first_letter] = row.split(',');
+                if (name && first_letter) {
+                    return { 
+                        name: name.trim(), 
+                        first_letter: first_letter.trim() 
+                    };
+                }
+                return null;
+            })
+            .filter(Boolean); // Remove any null entries
         console.log('Names loaded:', boyNames.length); // Debugging
     } catch (error) {
         console.error('Error loading names:', error);
