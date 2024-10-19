@@ -1,77 +1,57 @@
-const boyNames = [
-    "Liam", "Noah", "Oliver", "Elijah", "William", "James", "Benjamin", "Lucas", "Henry", "Alexander",
-    "Mason", "Michael", "Ethan", "Daniel", "Jacob", "Logan", "Jackson", "Sebastian", "Jack", "Aiden",
-    "Owen", "Samuel", "Matthew", "Joseph", "Levi", "Mateo", "David", "John", "Wyatt", "Carter"
-];
+let boyNames = [];
 
-const nameMeanings = {
-    "Liam": "Resolute protection",
-    "Noah": "Rest, comfort",
-    "Oliver": "Olive tree",
-    // Add meanings for all names...
-};
-
-const nameDisplay = document.getElementById('name-display');
-const nameMeaning = document.getElementById('name-meaning');
-const generateBtn = document.getElementById('generate-btn');
-const favoriteBtn = document.getElementById('favorite-btn');
-const favoritesList = document.getElementById('favorites-list');
-const searchInput = document.getElementById('search-input');
-const darkModeToggle = document.getElementById('dark-mode-toggle');
-
-let currentName = '';
-let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-
-function generateRandomName() {
-    const randomIndex = Math.floor(Math.random() * boyNames.length);
-    return boyNames[randomIndex];
-}
-
-function updateNameDisplay(name) {
-    currentName = name;
-    nameDisplay.textContent = name;
-    nameMeaning.textContent = nameMeanings[name] || "Meaning not available";
-}
-
-function addToFavorites(name) {
-    if (!favorites.includes(name)) {
-        favorites.push(name);
-        updateFavoritesList();
-        localStorage.setItem('favorites', JSON.stringify(favorites));
+async function loadNames() {
+    const loadingMessage = document.getElementById('loading-message');
+    loadingMessage.style.display = 'block';
+    try {
+        const response = await fetch('boy_names.csv');
+        const data = await response.text();
+        const rows = data.split('\n').slice(1); // Skip header
+        boyNames = rows.map(row => {
+            const [name, first_letter] = row.split(',');
+            return { name: name.trim(), first_letter: first_letter.trim() };
+        });
+    } catch (error) {
+        console.error('Error loading names:', error);
+    } finally {
+        loadingMessage.style.display = 'none';
     }
 }
 
-function updateFavoritesList() {
-    favoritesList.innerHTML = '';
-    favorites.forEach(name => {
-        const li = document.createElement('li');
-        li.textContent = name;
-        favoritesList.appendChild(li);
-    });
+function generateRandomNames(count = 10) {
+    const shuffled = boyNames.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
 }
 
-function filterNames(search) {
-    return boyNames.filter(name => name.toLowerCase().includes(search.toLowerCase()));
+function updateNameDisplay(names) {
+    const nameList = names.map(name => name.name).join(', ');
+    nameDisplay.textContent = nameList;
+    firstLetter.textContent = `First letter: ${names[0].first_letter}`;
+    currentName = names[0].name;
 }
 
 generateBtn.addEventListener('click', () => {
-    const randomName = generateRandomName();
-    updateNameDisplay(randomName);
+    const randomNames = generateRandomNames();
+    updateNameDisplay(randomNames);
 });
 
-favoriteBtn.addEventListener('click', () => {
-    if (currentName) {
-        addToFavorites(currentName);
-    }
-});
+// Load names when the page loads
+loadNames();
+
+function filterNames(search) {
+    return boyNames.filter(name => 
+        name.name.toLowerCase().includes(search.toLowerCase()) ||
+        name.first_letter.toLowerCase() === search.toLowerCase()
+    );
+}
 
 searchInput.addEventListener('input', (e) => {
     const filteredNames = filterNames(e.target.value);
     if (filteredNames.length > 0) {
-        updateNameDisplay(filteredNames[0]);
+        updateNameDisplay([filteredNames[0]]);
     } else {
         nameDisplay.textContent = "No matching names";
-        nameMeaning.textContent = "";
+        firstLetter.textContent = "";
     }
 });
 
@@ -80,3 +60,12 @@ darkModeToggle.addEventListener('click', () => {
 });
 
 updateFavoritesList();
+
+const nameDisplay = document.getElementById('name-display');
+const firstLetter = document.getElementById('first-letter');
+const generateBtn = document.getElementById('generate-btn');
+const favoriteBtn = document.getElementById('favorite-btn');
+const favoritesList = document.getElementById('favorites-list');
+const searchInput = document.getElementById('search-input');
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+const loadingMessage = document.getElementById('loading-message');
