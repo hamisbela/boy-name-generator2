@@ -1,4 +1,5 @@
 let boyNames = [];
+let currentName = '';
 
 async function loadNames() {
     const loadingMessage = document.getElementById('loading-message');
@@ -31,6 +32,8 @@ function generateRandomNames(count = 10) {
 
 function updateNameDisplay(names) {
     console.log('Updating name display:', names); // Debugging
+    const nameDisplay = document.getElementById('name-display');
+    const firstLetter = document.getElementById('first-letter');
     if (names.length === 0) {
         nameDisplay.textContent = "No names available";
         firstLetter.textContent = "";
@@ -48,7 +51,9 @@ generateBtn.addEventListener('click', () => {
 });
 
 // Load names when the page loads
-loadNames();
+loadNames().then(() => {
+    console.log('Names loaded, ready to generate'); // Debugging
+});
 
 function filterNames(search) {
     return boyNames.filter(name => 
