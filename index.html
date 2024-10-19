@@ -5,24 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boy Name Generator</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <h1>Boy Name Generator</h1>
         <div id="loading-message">Loading names...</div>
         <div class="controls">
-            <input type="text" id="search-input" placeholder="Search names or first letter...">
-            <button id="dark-mode-toggle">Toggle Dark Mode</button>
+            <select id="letter-select">
+                <option value="">Random</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+            <button id="generate-btn">Generate Names</button>
         </div>
-        <button id="generate-btn">Generate Names</button>
         <div id="generated-names">
-            <h2>Generated Names</h2>
             <ul id="name-list"></ul>
         </div>
-        <div id="first-letter"></div>
-        <button id="favorite-btn">Add to Favorites</button>
-        <h2>Favorites</h2>
-        <ul id="favorites-list"></ul>
     </div>
     <script src="script.js"></script>
 </body>
