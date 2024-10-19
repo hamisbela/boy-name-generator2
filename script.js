@@ -58,8 +58,9 @@ function updateNameDisplay(names) {
 }
 
 function filterNames(search) {
+    if (!search) return generateRandomNames(); // If search is empty, return random names
     return boyNames.filter(name => 
-        name.name.toLowerCase().includes(search.toLowerCase()) ||
+        name.name.toLowerCase().startsWith(search.toLowerCase()) ||
         name.first_letter.toLowerCase() === search.toLowerCase()
     );
 }
@@ -90,11 +91,7 @@ favoriteBtn.addEventListener('click', () => {
 
 searchInput.addEventListener('input', (e) => {
     const filteredNames = filterNames(e.target.value);
-    if (filteredNames.length > 0) {
-        updateNameDisplay([filteredNames[0]]);
-    } else {
-        updateNameDisplay([]);
-    }
+    updateNameDisplay(filteredNames);
 });
 
 darkModeToggle.addEventListener('click', () => {
