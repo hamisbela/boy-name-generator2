@@ -11,6 +11,7 @@ async function loadNames() {
             const [name, first_letter] = row.split(',');
             return { name: name.trim(), first_letter: first_letter.trim() };
         });
+        console.log('Names loaded:', boyNames.length); // Debugging
     } catch (error) {
         console.error('Error loading names:', error);
     } finally {
@@ -19,11 +20,22 @@ async function loadNames() {
 }
 
 function generateRandomNames(count = 10) {
-    const shuffled = boyNames.sort(() => 0.5 - Math.random());
+    console.log('Generating random names...'); // Debugging
+    if (boyNames.length === 0) {
+        console.log('No names available'); // Debugging
+        return [];
+    }
+    const shuffled = [...boyNames].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
 
 function updateNameDisplay(names) {
+    console.log('Updating name display:', names); // Debugging
+    if (names.length === 0) {
+        nameDisplay.textContent = "No names available";
+        firstLetter.textContent = "";
+        return;
+    }
     const nameList = names.map(name => name.name).join(', ');
     nameDisplay.textContent = nameList;
     firstLetter.textContent = `First letter: ${names[0].first_letter}`;
