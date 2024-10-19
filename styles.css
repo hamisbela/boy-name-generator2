@@ -93,7 +93,22 @@ button:hover {
     margin-bottom: 1rem;
 }
 
+#generated-names {
+    margin-top: 20px;
+    text-align: left;
+}
+
+#name-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#name-list li {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
 #first-letter {
+    margin-top: 10px;
     font-style: italic;
-    margin-bottom: 1rem;
 }

@@ -32,16 +32,20 @@ function generateRandomNames(count = 10) {
 
 function updateNameDisplay(names) {
     console.log('Updating name display:', names); // Debugging
-    const nameDisplay = document.getElementById('name-display');
+    const nameList = document.getElementById('name-list');
     const firstLetter = document.getElementById('first-letter');
+    nameList.innerHTML = ''; // Clear previous names
     if (names.length === 0) {
-        nameDisplay.textContent = "No names available";
+        nameList.innerHTML = "<li>No names available</li>";
         firstLetter.textContent = "";
         return;
     }
-    const nameList = names.map(name => name.name).join(', ');
-    nameDisplay.textContent = nameList;
-    firstLetter.textContent = `First letter: ${names[0].first_letter}`;
+    names.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name.name;
+        nameList.appendChild(li);
+    });
+    firstLetter.textContent = `First letter of first name: ${names[0].first_letter}`;
     currentName = names[0].name;
 }
 
